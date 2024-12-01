@@ -68,8 +68,10 @@ def run_benchmark(interpreter, dataset_paths):
     Run inference on the dataset and collect benchmark metrics.
     """
     inference_times = []
+    predictions = []
     cpu_usages = []
     memory_usages = []
+    confidence_scores = []
 
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
@@ -104,14 +106,19 @@ def run_benchmark(interpreter, dataset_paths):
 
             cpu_usages.append((cpu_before + cpu_after) / 2)  # Average CPU usage
             memory_usages.append(mem_after)  # Memory usage at the end of inference
+            
+             # Get the output tensor
+            output = interpreter.get_tensor(output_details[0]['index'])
+            predictions.append(output)
+            confidence_scores.append(np.max(output))  # <==== Extract confidence score
 
         except Exception as e:
             print(f"Error processing file {file_path}: {e}")
 
-    return inference_times, cpu_usages, memory_usages
+    return inference_times, predictions, confidence_scores, cpu_usages, memory_usages
 
 # Visualization functions
-def save_visualizations(inference_times, cpu_usages, memory_usages):
+def save_visualizations(inference_times, predictions, confidence_scores, cpu_usages, memory_usages):
     """
     Create and save visualizations for benchmark metrics.
     """
@@ -141,17 +148,37 @@ def save_visualizations(inference_times, cpu_usages, memory_usages):
     plt.ylabel("Memory Usage (%)")
     plt.savefig(os.path.join(VISUALIZATION_DIR, "memory_usage_plot.png"))
     plt.close()
+    
+    # Confidence Scores Over Time
+    plt.figure()
+    plt.plot(confidence_scores, color='purple')
+    plt.title("Confidence Scores Over Time (Keyword Spotting)")
+    plt.xlabel("Iteration")
+    plt.ylabel("Confidence Score")
+    plt.savefig(os.path.join(VISUALIZATION_DIR, "keyword_confidence_scores_plot.png"))
+    plt.close()
+
+    # Predicted Labels Over Time
+    plt.figure()
+    predicted_labels = [np.argmax(pred) for pred in predictions]
+    plt.plot(predicted_labels, color='cyan')
+    plt.title("Predicted Labels Over Time (Keyword Spotting)")
+    plt.xlabel("Iteration")
+    plt.ylabel("Predicted Label")
+    plt.savefig(os.path.join(VISUALIZATION_DIR, "keyword_predicted_labels_plot.png"))
+    plt.close()
 
 # Save metrics to CSV
-def save_results_to_csv(inference_times, cpu_usages, memory_usages):
+def save_results_to_csv(inference_times, predictions, confidence_scores, cpu_usages, memory_usages):
     """
-    Save benchmark metrics to a CSV file.
+    Save inference results to a CSV file.
     """
     with open(RESULTS_FILE, "w", newline="") as csvfile:
         csvwriter = csv.writer(csvfile)
-        csvwriter.writerow(["Iteration", "Inference Time (s)", "CPU Usage (%)", "Memory Usage (%)"])
+        csvwriter.writerow(["Iteration", "Inference Time (s)", "Predicted Label", "Confidence Score", "CPU Usage (%)", "Memory Usage (%)"])  # <====
         for i in range(len(inference_times)):
-            csvwriter.writerow([i + 1, inference_times[i], cpu_usages[i], memory_usages[i]])
+            predicted_label = np.argmax(predictions[i])  # <====
+            csvwriter.writerow([i + 1, inference_times[i], predicted_label, confidence_scores[i], cpu_usages[i], memory_usages[i]])  # <====
     print(f"Benchmark results saved to {RESULTS_FILE}")
 
 # Main Execution
@@ -167,13 +194,13 @@ def main():
     dataset_paths = load_dataset(DATASET_DIR, MAX_INFERENCES)
 
     print("Running Benchmark...")
-    inference_times, cpu_usages, memory_usages = run_benchmark(interpreter, dataset_paths)
+    inference_times, predictions, confidence_scores, cpu_usages, memory_usages = run_benchmark(interpreter, dataset_paths)
 
     print("Saving Visualizations...")
-    save_visualizations(inference_times, cpu_usages, memory_usages)
+    save_visualizations(inference_times, predictions, confidence_scores, cpu_usages, memory_usages)
 
     print("Saving Results to CSV...")
-    save_results_to_csv(inference_times, cpu_usages, memory_usages)
+    save_results_to_csv(inference_times, predictions, confidence_scores, cpu_usages, memory_usages)
 
     print("Benchmark Complete!")
 

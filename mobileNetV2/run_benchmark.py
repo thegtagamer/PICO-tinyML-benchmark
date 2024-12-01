@@ -62,9 +62,12 @@ def preprocess_image(image_path, input_shape):
 # Benchmark function
 def run_benchmark(interpreter, dataset_paths):
     inference_times = []
+    predictions = []
     cpu_usages = []
     memory_usages = []
     # power_consumptions = []
+    confidence_scores = []  # <====
+
 
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
@@ -100,14 +103,18 @@ def run_benchmark(interpreter, dataset_paths):
 
         # # Measure power consumption
         # power_consumptions.append(get_power_consumption())
+        # Get the output tensor
+        output = interpreter.get_tensor(output_details[0]['index'])
+        predictions.append(output)
+        confidence_scores.append(np.max(output))  # <==== Extract confidence score
 
     # return inference_times, cpu_usages, memory_usages, power_consumptions
-    return inference_times, cpu_usages, memory_usages
+    return inference_times, predictions, confidence_scores, cpu_usages, memory_usages
 
 
 # Visualization functions
 # def save_visualizations(inference_times, cpu_usages, memory_usages, power_consumptions):
-def save_visualizations(inference_times, cpu_usages, memory_usages):
+def save_visualizations(inference_times, predictions, confidence_scores, cpu_usages, memory_usages):
     # Plot Inference Time
     plt.figure()
     plt.hist(inference_times, bins=20, color='blue', alpha=0.7)
@@ -143,21 +150,38 @@ def save_visualizations(inference_times, cpu_usages, memory_usages):
     # plt.ylabel("Power Consumption (W)")
     # plt.savefig(os.path.join(VISUALIZATION_DIR, "power_consumption_plot.png"))
     # plt.close()
+    
+    # Confidence Scores Over Time <====
+    plt.figure()
+    plt.plot(confidence_scores, color='purple')
+    plt.title("Confidence Scores Over Time (MobileNet)")
+    plt.xlabel("Iteration")
+    plt.ylabel("Confidence Score")
+    plt.savefig(os.path.join(VISUALIZATION_DIR, "mobilenet_confidence_scores_plot.png"))
+    plt.close()
+
+    # Predicted Labels Over Time <====
+    plt.figure()
+    predicted_labels = [np.argmax(pred) for pred in predictions]
+    plt.plot(predicted_labels, color='cyan')
+    plt.title("Predicted Labels Over Time (MobileNet)")
+    plt.xlabel("Iteration")
+    plt.ylabel("Predicted Label")
+    plt.savefig(os.path.join(VISUALIZATION_DIR, "mobilenet_predicted_labels_plot.png"))
+    plt.close()
 
 # Save metrics to CSV
-# def save_results_to_csv(inference_times, cpu_usages, memory_usages, power_consumptions):
-def save_results_to_csv(inference_times, cpu_usages, memory_usages):
-
+def save_results_to_csv(inference_times, predictions, confidence_scores, cpu_usages, memory_usages):
+    """
+    Save inference results to a CSV file.
+    """
     with open(RESULTS_FILE, "w", newline="") as csvfile:
         csvwriter = csv.writer(csvfile)
-        csvwriter.writerow(["Iteration", "Inference Time (s)", "CPU Usage (%)", "Memory Usage (%)"])
-
-        # csvwriter.writerow(["Iteration", "Inference Time (s)", "CPU Usage (%)", "Memory Usage (%)", "Power Consumption (W)"])
+        csvwriter.writerow(["Iteration", "Inference Time (s)", "Predicted Label", "Confidence Score", "CPU Usage (%)", "Memory Usage (%)"])  # <====
         for i in range(len(inference_times)):
-            # csvwriter.writerow([i + 1, inference_times[i], cpu_usages[i], memory_usages[i], power_consumptions[i]])
-            csvwriter.writerow([i + 1, inference_times[i], cpu_usages[i], memory_usages[i]])
-
-    print(f"Raw benchmark results saved to {RESULTS_FILE}")
+            predicted_label = np.argmax(predictions[i])
+            csvwriter.writerow([i + 1, inference_times[i], predicted_label, confidence_scores[i], cpu_usages[i], memory_usages[i]])  # <====
+    print(f"Benchmark results saved to {RESULTS_FILE}")
 
 # Main Execution
 def main():
@@ -170,17 +194,17 @@ def main():
 
     print("Running Benchmark...")
     # inference_times, cpu_usages, memory_usages, power_consumptions = run_benchmark(interpreter, dataset_paths)
-    inference_times, cpu_usages, memory_usages = run_benchmark(interpreter, dataset_paths)
+    inference_times, predictions, confidence_scores, cpu_usages, memory_usages = run_benchmark(interpreter, dataset_paths)
 
 
     print("Saving visualizations...")
     # save_visualizations(inference_times, cpu_usages, memory_usages, power_consumptions)
-    save_visualizations(inference_times, cpu_usages, memory_usages)
+    save_visualizations(inference_times, predictions, confidence_scores, cpu_usages, memory_usages)
 
 
     print("Saving results to CSV...")
     # save_results_to_csv(inference_times, cpu_usages, memory_usages, power_consumptions)
-    save_results_to_csv(inference_times, cpu_usages, memory_usages)
+    save_results_to_csv(inference_times, predictions, confidence_scores, cpu_usages, memory_usages)
 
 
     print("Benchmark complete!")

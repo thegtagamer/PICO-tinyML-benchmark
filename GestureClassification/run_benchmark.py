@@ -56,6 +56,8 @@ def run_benchmark(interpreter, dataset_paths):
     predictions = []
     cpu_usages = []
     memory_usages = []
+    confidence_scores = []
+
 
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
@@ -63,38 +65,44 @@ def run_benchmark(interpreter, dataset_paths):
 
     for file_path in tqdm(dataset_paths, desc="Benchmarking Inference"):
         input_data = preprocess_image(file_path, input_shape)
+        
+        try:
+            # Set the input tensor
+            interpreter.set_tensor(input_details[0]['index'], input_data)
 
-        # Set the input tensor
-        interpreter.set_tensor(input_details[0]['index'], input_data)
+            # Monitor system metrics before inference
+            cpu_before = psutil.cpu_percent(interval=None)
+            mem_before = psutil.virtual_memory().percent
 
-        # Monitor system metrics before inference
-        cpu_before = psutil.cpu_percent(interval=None)
-        mem_before = psutil.virtual_memory().percent
+            # Perform inference
+            start_time = time.perf_counter()
+            interpreter.invoke()
+            end_time = time.perf_counter()
 
-        # Perform inference
-        start_time = time.perf_counter()
-        interpreter.invoke()
-        end_time = time.perf_counter()
+            # Monitor system metrics after inference
+            cpu_after = psutil.cpu_percent(interval=None)
+            mem_after = psutil.virtual_memory().percent
 
-        # Monitor system metrics after inference
-        cpu_after = psutil.cpu_percent(interval=None)
-        mem_after = psutil.virtual_memory().percent
+            # Calculate metrics
+            inference_time = end_time - start_time
+            inference_times.append(inference_time)
 
-        # Calculate metrics
-        inference_time = end_time - start_time
-        inference_times.append(inference_time)
+            cpu_usages.append((cpu_before + cpu_after) / 2)  # Average CPU usage
+            memory_usages.append(mem_after)  # Memory usage at the end of inference
 
-        cpu_usages.append((cpu_before + cpu_after) / 2)  # Average CPU usage
-        memory_usages.append(mem_after)  # Memory usage at the end of inference
+            # Get the output tensor
+            output = interpreter.get_tensor(output_details[0]['index'])
+            predictions.append(output)
+            confidence_scores.append(np.max(output))  # <==== Extract confidence score
+        
+        except Exception as e:
+            print(f"Error processing file {file_path}: {e}")
 
-        # Get the output tensor
-        output = interpreter.get_tensor(output_details[0]['index'])
-        predictions.append(output)
 
-    return inference_times, predictions, cpu_usages, memory_usages
+    return inference_times, predictions, confidence_scores, cpu_usages, memory_usages
 
 # Visualization functions
-def save_visualizations(inference_times, predictions, cpu_usages, memory_usages):
+def save_visualizations(inference_times, predictions, confidence_scores, cpu_usages, memory_usages):
     """
     Create and save visualizations for benchmark metrics.
     """
@@ -134,18 +142,37 @@ def save_visualizations(inference_times, predictions, cpu_usages, memory_usages)
     plt.ylabel("Frequency")
     plt.savefig(os.path.join(VISUALIZATION_DIR, "prediction_distribution.png"))
     plt.close()
+    
+    # Confidence Scores Over Time <====
+    plt.figure()
+    plt.plot(confidence_scores, color='purple')
+    plt.title("Confidence Scores Over Time (Gesture Classification)")
+    plt.xlabel("Iteration")
+    plt.ylabel("Confidence Score")
+    plt.savefig(os.path.join(VISUALIZATION_DIR, "gesture_confidence_scores_plot.png"))
+    plt.close()
+
+    # Predicted Labels Over Time <====
+    plt.figure()
+    predicted_labels = [np.argmax(pred) for pred in predictions]
+    plt.plot(predicted_labels, color='cyan')
+    plt.title("Predicted Labels Over Time (Gesture Classification)")
+    plt.xlabel("Iteration")
+    plt.ylabel("Predicted Label")
+    plt.savefig(os.path.join(VISUALIZATION_DIR, "gesture_predicted_labels_plot.png"))
+    plt.close()
 
 # Save results to CSV
-def save_results_to_csv(inference_times, predictions, cpu_usages, memory_usages):
+def save_results_to_csv(inference_times, predictions, confidence_scores, cpu_usages, memory_usages):
     """
     Save inference results to a CSV file.
     """
     with open(RESULTS_FILE, "w", newline="") as csvfile:
         csvwriter = csv.writer(csvfile)
-        csvwriter.writerow(["Iteration", "Inference Time (s)", "Predicted Label", "CPU Usage (%)", "Memory Usage (%)"])
+        csvwriter.writerow(["Iteration", "Inference Time (s)", "Predicted Label", "Confidence Score", "CPU Usage (%)", "Memory Usage (%)"])  # <====
         for i in range(len(inference_times)):
-            predicted_label = np.argmax(predictions[i])  # Get the predicted class
-            csvwriter.writerow([i + 1, inference_times[i], predicted_label, cpu_usages[i], memory_usages[i]])
+            predicted_label = np.argmax(predictions[i])  # <====
+            csvwriter.writerow([i + 1, inference_times[i], predicted_label, confidence_scores[i], cpu_usages[i], memory_usages[i]])  # <====
     print(f"Benchmark results saved to {RESULTS_FILE}")
 
 # Main function
@@ -162,15 +189,15 @@ def main():
 
     # Run benchmark
     print("Running Benchmark...")
-    inference_times, predictions, cpu_usages, memory_usages = run_benchmark(interpreter, dataset_paths)
+    inference_times, predictions, confidence_scores, cpu_usages, memory_usages = run_benchmark(interpreter, dataset_paths)
 
     # Save visualizations
     print("Saving Visualizations...")
-    save_visualizations(inference_times, predictions, cpu_usages, memory_usages)
+    save_visualizations(inference_times, predictions, confidence_scores, cpu_usages, memory_usages)
 
     # Save results to CSV
     print("Saving Results to CSV...")
-    save_results_to_csv(inference_times, predictions, cpu_usages, memory_usages)
+    save_results_to_csv(inference_times, predictions, confidence_scores, cpu_usages, memory_usages)
 
     print("Benchmark Complete!")
 
