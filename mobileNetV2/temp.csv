@@ -1,0 +1,417 @@
+____________________________________________________________________
+			P o w e r T O P
+
+____________________________________________________________________
+ *  *  *   System Information   *  *  *
+
+PowerTOP Version;2.14 ran at Sun Dec  1 02:13:22 2024
+
+Kernel Version;Linux version 6.6.32-ti-arm64-r10
+System Name;
+CPU Information;2
+OS Information;Debian GNU/Linux 12 (bookworm)
+
+Target: 1 units/s;System:  99.7 wakeup/s;CPU:  0.8% usage;GPU: 0 ops/s;GFX: 0 wakeups/s;VFS: 0 ops/s;
+
+____________________________________________________________________
+ *  *  *   Top 10 Power Consumers   *  *  *
+
+Usage;Events/s;Category;Description
+  0.0%; 28.1;Timer;tick_sched_timer
+  0.0%; 14.2;Process;[PID 17] [rcu_preempt]
+  0.1%; 10.8;Process;[PID 2109] /home/debian/.vscode-server/cli/servers/Stable-38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/server/node --dns-result-ord
+  0.1%;  5.6;Process;[PID 1776] /home/debian/.vscode-server/cli/servers/Stable-38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/server/node /home/debian/.vs
+  0.1%;  4.0;Process;[PID 1745] /home/debian/.vscode-server/cli/servers/Stable-38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/server/node /home/debian/.vs
+  0.0%;  4.2;kWork;psi_avgs_work
+  0.0%;  4.0;Process;[PID 103] [irq/653-6000000]
+  0.1%;  3.8;Process;[PID 2082] /home/debian/.vscode-server/code-38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40 command-shell --cli-data-dir /home/debian/
+  0.0%;  2.4;Process;[PID 2120] /home/debian/.vscode-server/cli/servers/Stable-38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/server/node /home/debian/.vs
+  0.0%;  2.4;Process;[PID 531] /usr/bin/containerd 
+
+____________________________________________________________________
+ *  *  *   Processor Idle State Report   *  *  *
+
+Package;0
+;
+;
+;
+
+CPU;0
+CPU;1
+;;
+;;
+;;
+;;
+;;
+;;
+
+____________________________________________________________________
+ *  *  *   Processor Frequency Report   *  *  *
+
+Package;0
+Idle; 100.0% 
+;
+;
+;
+;
+
+CPU 0
+Idle; 100.0% 
+CPU 1
+Idle; 100.0% 
+;
+;
+;
+;
+
+____________________________________________________________________
+ *  *  *   Overview of Software Power Consumers   *  *  *
+
+Usage;Wakeups/s;GPU ops/s;Disk IO/s;GFX Wakeups/s;Category;Description
+185.8 us/s; 28.1;;;;Timer;tick_sched_timer
+108.4 us/s; 14.2;;;;Process;[PID 17] [rcu_preempt]
+  1.4 ms/s; 10.8;;;;Process;[PID 2109] /home/debian/.vscode-server/cli/servers/Stable-38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/server/node --dns-result-ord
+  1.0 ms/s;  5.6;;;;Process;[PID 1776] /home/debian/.vscode-server/cli/servers/Stable-38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/server/node /home/debian/.vs
+  1.3 ms/s;  4.0;;;;Process;[PID 1745] /home/debian/.vscode-server/cli/servers/Stable-38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/server/node /home/debian/.vs
+ 22.8 us/s;  4.2;;;;kWork;psi_avgs_work
+145.0 us/s;  4.0;;;;Process;[PID 103] [irq/653-6000000]
+600.6 us/s;  3.8;;;;Process;[PID 2082] /home/debian/.vscode-server/code-38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40 command-shell --cli-data-dir /home/debian/
+193.8 us/s;  2.4;;;;Process;[PID 2120] /home/debian/.vscode-server/cli/servers/Stable-38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/server/node /home/debian/.vs
+ 39.5 us/s;  2.4;;;;Process;[PID 531] /usr/bin/containerd 
+383.1 us/s;  2.2;;;;Process;[PID 2054] sshd: debian@notty 
+185.3 us/s;  2.2;;;;Interrupt;[2] IPI
+ 29.9 us/s;  1.8;;;;kWork;thermal_zone_device_check
+171.3 us/s;  1.4;;;;Process;[PID 2075] /home/debian/.vscode-server/code-38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40 command-shell --cli-data-dir /home/debian/
+658.3 us/s;  1.0;;;;kWork;phy_state_machine
+ 72.8 us/s;  1.2;;;;Process;[PID 568] /usr/bin/containerd 
+ 18.3 us/s;  1.2;;;;Process;[PID 34] [kcompactd0]
+  7.1 us/s;  1.2;;;;kWork;pm_runtime_work
+ 51.5 us/s;  1.0;;;;Process;[PID 538] /usr/bin/containerd 
+  6.5 us/s;  1.0;;;;kWork;vmstat_shepherd
+185.4 us/s;  0.8;;;;Interrupt;[7] sched(softirq)
+ 39.4 us/s;  0.8;;;;kWork;wb_workfn
+  9.7 us/s;  0.6;;;;Interrupt;[4] block(softirq)
+  5.8 us/s;  0.6;;;;Interrupt;[212] mmc0
+  1.8 us/s;  0.6;;;;Timer;sched_rt_period_timer
+ 67.2 us/s;  0.4;;;;Process;[PID 818] /opt/bb-code-server/app/lib/node /opt/bb-code-server/app/out/node/entry 
+ 37.6 us/s;  0.4;;;;Process;[PID 104] [jbd2/mmcblk0p3-]
+ 17.4 us/s;  0.4;;;;kWork;flush_memcg_stats_dwork
+  2.5 us/s;  0.4;;;;Timer;watchdog_timer_fn
+  2.3 us/s;  0.4;;;;kWork;blk_mq_requeue_work
+  0.9 ms/s;;;;;Process;[PID 4065] powertop --time=5 --csv=temp.csv 
+ 10.5 us/s; 0.20;;;;Process;[PID 22] [ksoftirqd/1]
+  9.8 us/s; 0.20;;;;Process;[PID 934] /usr/libexec/rtkit-daemon 
+  0.7 us/s; 0.20;;;;kWork;neigh_managed_work
+  0.4 us/s; 0.20;;;;kWork;wb_update_bandwidth_workfn
+195.2 us/s;;;;;Interrupt;[11] arch_timer
+181.0 us/s;;;;;Interrupt;[3] net_rx(softirq)
+122.6 us/s;;;;;Timer;hrtimer_wakeup
+ 94.5 us/s;;;;;Interrupt;[1] timer(softirq)
+ 63.6 us/s;;;;;Timer;delayed_work_timer_fn
+ 45.0 us/s;;;;;Interrupt;[9] RCU(softirq)
+ 44.9 us/s;;;;;Timer;process_timeout
+ 41.7 us/s;;;;;Process;[PID 10] [kworker/0:1]
+ 41.5 us/s;;;;;Process;[PID 82] [kworker/1:5]
+ 29.0 us/s;;;;;Process;[PID 16] [ksoftirqd/0]
+ 17.6 us/s;;;;;Timer;tcp_delack_timer
+ 14.1 us/s;;;;;Timer;tcp_orphan_update
+ 12.4 us/s;;;;;Interrupt;[653] 6000000.usb
+ 11.8 us/s;;;;;Process;[PID 1049] [kworker/u4:1]
+ 11.1 us/s;;;;;Timer;led_heartbeat_function
+ 11.0 us/s;;;;;Process;[PID 1829] [kworker/1:1H]
+  9.9 us/s;;;;;Timer;pm_suspend_timer_fn
+  8.9 us/s;;;;;Interrupt;[2] net tx(softirq)
+  5.9 us/s;;;;;kWork;vmstat_update
+  4.6 us/s;;;;;Process;[PID 935] /usr/libexec/rtkit-daemon 
+  4.1 us/s;;;;;Timer;blk_stat_timer_fn
+  3.4 us/s;;;;;Timer;tcp_write_timer
+  3.0 us/s;;;;;Timer;mix_interrupt_randomness
+  2.2 us/s;;;;;kWork;neigh_periodic_work
+  2.0 us/s;;;;;Process;[PID 18] [migration/0]
+  1.2 us/s;;;;;Process;[PID 21] [migration/1]
+  1.2 us/s;;;;;Timer;commit_timeout
+  1.1 us/s;;;;;Timer;writeout_period
+  0.2 us/s;;;;;Interrupt;[1] IPI
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+;;;;;;
+
+____________________________________________________________________
+ *  *  *   Device Power Report   *  *  *
+
+Usage;Device Name
+  0.9%;CPU use
+100.0%;runtime-bus@100000:wiz@5050000
+100.0%;runtime-bus@100000:wiz@5030000
+100.0%;runtime-b000000.icssg
+100.0%;runtime-40200000.tscadc
+100.0%;runtime-4e10000.rng
+100.0%;runtime-4e00000.crypto
+100.0%;runtime-40210000.tscadc
+100.0%;runtime-b100000.icssg
+100.0%;runtime-bus@100000:wiz@5020000
+100.0%;PCI Device: Texas Instruments Device b00d
+100.0%;runtime-bus@100000:wiz@5000000
+100.0%;runtime-4300000.video-decoder
+100.0%;runtime-31f80000.mailbox
+100.0%;USB device: xHCI Host Controller
+100.0%;USB device: xHCI Host Controller
+100.0%;USB device: usb-device-0451-8142
+100.0%;runtime-bus@100000:wiz@5010000
+100.0%;runtime-6400000.usb
+100.0%;runtime-xhci-hcd.0.auto
+100.0%;runtime-4104000.cdns-usb
+100.0%;runtime-4200000.video-encoder
+100.0%;runtime-6000000.usb
+100.0%;runtime-4f80000.mmc
+100.0%;runtime-42040000.temperature-sensor
+100.0%;runtime-2910000.pcie
+100.0%;runtime-2800000.serial
+100.0%;runtime-4114000.cdns-usb
+100.0%;runtime-a000000.dp-bridge
+100.0%;runtime-4fb0000.mmc
+100.0%;USB device: usb-device-0451-8140
+100.0%;runtime-46000000.ethernet
+ 12.4%;runtime-46000f00.mdio
+  4.2 pkts/s;Network interface: usb0 (configfs-gadget.g_multi)
+  0.0%;runtime-40800000.esm
+  0.0%;runtime-reg-dummy
+  0.0%;runtime-3020000.pwm
+  0.0%;runtime-b006000.rtu
+  0.0%;runtime-104200.pinctrl
+  0.0%;runtime-regulator-4
+  0.0%;runtime-2500000.timer
+  0.0%;runtime-2460000.timer
+  0.0 pkts/s;nic:docker0
+  0.0%;runtime-firmware:optee
+  0.0%;runtime-2210000.watchdog
+  0.0%;runtime-5030000.serdes
+  0.0%;runtime-bus@100000:bus@28380000:bus@43000000
+  0.0%;runtime-l2-cache0
+  0.0%;runtime-47000000.bus
+  0.0%;runtime-3000000.pwm
+  0.0%;runtime-regulator-5
+  0.0%;runtime-600000.gpio
+  0.0%;runtime-2470000.timer
+  0.0%;runtime-b10a000.txpru
+  0.0%;runtime-leds
+  0.0%;runtime-firmware:psci
+  0.0%;runtime-b026000.cfg
+  0.0%;runtime-b104000.rtu
+  0.0%;runtime-104000.mux-controller
+  0.0%;runtime-TI-am335x-adc.2.auto
+  0.0%;runtime-regulator-0
+  0.0%;runtime-platform-framebuffer.0
+  0.0 pkts/s;nic:dummy0
+  0.0%;runtime-5d00000.r5f
+  0.0%;runtime-2440000.timer
+  0.0%;runtime-43000014.chipid
+  0.0%;runtime-2490000.timer
+  0.0%;runtime-2530000.timer
+  0.0%;runtime-2060000.i2c
+  0.0 pkts/s;Network interface: eth0 (am65-cpsw-nuss)
+  0.0 pkts/s;Network interface: usb1 (configfs-gadget.g_multi)
+  0.0%;runtime-31150000.dma-controller
+  0.0%;runtime-2010000.i2c
+  0.0%;runtime-41400000.r5f
+  0.0%;runtime-b00c000.txpru
+  0.0%;runtime-31f83000.mailbox
+  0.0%;runtime-5010000.serdes
+  0.0%;runtime-b106000.rtu
+  0.0%;runtime-36600000.iommu
+  0.0%;runtime-bus@100000:r5fss@5e00000
+  0.0%;runtime-b034000.pru
+  0.0%;runtime-TI-am335x-adc.1.auto
+  0.0%;runtime-b132000.mii-rt
+  0.0%;runtime-Fixed MDIO bus.0
+  0.0%;runtime-2030000.i2c
+  0.0%;runtime-41000000.r5f
+  0.0%;runtime-bus@100000:interrupt-controller@a00000
+  0.0%;runtime-b120000.interrupt-controller
+  0.0%;runtime-b126000.cfg
+  0.0%;runtime-30e00000.spinlock
+  0.0%;runtime-bus@100000
+  0.0%;runtime-47000004.mux-controller
+  0.0%;runtime-31f81000.mailbox
+  0.0%;runtime-5e00000.r5f
+  0.0%;runtime-b033000.mii-g-rt
+  0.0%;runtime-4e20000000.gpu
+  0.0%;runtime-11c000.pinctrl
+  0.0%;runtime-timer-cl0-cpu0
+  0.0%;runtime-3c000000.ringacc
+  0.0%;runtime-2510000.timer
+  0.0%;runtime-2050000.i2c
+  0.0%;runtime-40f04040.phy
+  0.0%;runtime-bus@100000:bus@28380000:r5fss@41000000
+  0.0%;runtime-b038000.pru
+  0.0%;runtime-gpio-keys
+  0.0%;runtime-700000.esm
+  0.0%;runtime-44083000.system-controller
+  0.0%;runtime-b134000.pru
+  0.0%;runtime-regulator-1
+  0.0%;runtime-24a0000.timer
+  0.0%;runtime-104140.clock-controller
+  0.0%;runtime-bus@100000:r5fss@5c00000
+  0.0%;runtime-2450000.timer
+  0.0%;I2C Adapter (i2c-5): OMAP I2C adapter
+  0.0%;runtime-31f84000.mailbox
+  0.0%;runtime-5f00000.r5f
+  0.0%;runtime-32c00000.mailbox
+  0.0%;runtime-2000000.i2c
+  0.0%;runtime-regulator-3
+  0.0%;runtime-2b800000.ringacc
+  0.0%;runtime-5020000.serdes
+  0.0%;runtime-bus@100000:bus@28380000
+  0.0%;runtime-bus@100000:bus@30000000
+  0.0%;runtime-33d00000.interrupt-controller
+  0.0%;runtime-b032000.mii-rt
+  0.0%;runtime-pmu
+  0.0%;runtime-b133000.mii-g-rt
+  0.0%;runtime-42120000.i2c
+  0.0%;runtime-601000.gpio
+  0.0%;runtime-regulatory.0
+  0.0%;runtime-4d80800000.dsp
+  0.0%;runtime-b138000.pru
+  0.0%;runtime-44083000.system-controller:power-controller
+  0.0%;runtime-b020000.interrupt-controller
+  0.0%;runtime-2200000.watchdog
+  0.0%;runtime-42110000.gpio
+  0.0%;runtime-310e0000.interrupt-controller
+  0.0%;I2C Adapter (i2c-7): OMAP I2C adapter
+  0.0%;I2C Adapter (i2c-0): OMAP I2C adapter
+  0.0%;I2C Adapter (i2c-2): OMAP I2C adapter
+  0.0%;runtime-b10c000.txpru
+  0.0%;runtime-104044.phy
+  0.0%;runtime-42200000.interrupt-controller
+  0.0%;runtime-64800000.dsp
+  0.0%;runtime-44083000.system-controller:reset-controller
+  0.0%;I2C Adapter (i2c-1): OMAP I2C adapter
+  0.0%;runtime-b00a000.txpru
+  0.0%;runtime-2430000.timer
+  0.0%;I2C Adapter (i2c-8): a000000.dp-bridge
+  0.0%;runtime-104280.pinctrl
+  0.0%;runtime-2520000.timer
+  0.0%;runtime-285c0000.dma-controller
+  0.0%;runtime-31f82000.mailbox
+  0.0%;runtime-40f00000.syscon
+  0.0%;runtime-serial8250
+  0.0%;I2C Adapter (i2c-6): OMAP I2C adapter
+  0.0%;runtime-5000000.serdes
+  0.0%;runtime-41c00000.sram
+  0.0%;runtime-rproc-virtio.3.auto
+  0.0%;runtime-44083000.system-controller:clock-controller
+  0.0%;runtime-regulator-2
+  0.0%;runtime-4d81800000.dsp
+  0.0%;runtime-connector
+  0.0%;runtime-70000000.sram
+  0.0%;runtime-100000.scm-conf
+  0.0%;runtime-5050000.serdes
+  0.0%;I2C Adapter (i2c-3): OMAP I2C adapter
+  0.0%;runtime-104080.mux-controller
+  0.0%;I2C Device (0-0050): 24c04
+  0.0%;runtime-2040000.i2c
+  0.0%;runtime-5c00000.r5f
+  0.0%;runtime-4a00000.dss
+  0.0%;runtime-310d0000.cpts
+  0.0%;runtime-l3-cache0
+  0.0%;runtime-b004000.rtu
+  0.0%;runtime-bus@100000:bus@28380000:bus@28380000
+  0.0%;runtime-24b0000.timer
+  0.0%;runtime-2480000.timer
+  0.0%;I2C Device (0-0051): dummy
+  0.0%;runtime-2020000.i2c
+  0.0%;runtime-4301c000.pinctrl
+  0.0%;I2C Adapter (i2c-4): OMAP I2C adapter
+____________________________________________________________________
+ *  *  *   Process Device Activity   *  *  *
+
+Process;Device
+systemd;/dev/autofs
+;/dev/kmsg
+;/dev/rfkill
+systemd-journal;/dev/kmsg
+;/dev/kmsg
+iwd;/dev/rfkill
+systemd-logind;/dev/input/event0
+umtprd;/dev/ffs-mtp/ep0
+;/dev/ffs-mtp/ep1
+;/dev/ffs-mtp/ep2
+;/dev/ffs-mtp/ep3
+pipewire;/dev/snd/seq
+;/dev/snd/seq
+
+____________________________________________________________________
+ *  *  *   AHCI ALPM Residency Statistics - Not supported on this macine   *  *  *
+
+____________________________________________________________________
+ *  *  *   Software Settings in Need of Tuning   *  *  *
+
+Description;Script
+VM writeback timeout;echo '1500' > '/proc/sys/vm/dirty_writeback_centisecs';
+Runtime PM for PCI Device Texas Instruments Device b00d;echo 'auto' > '/sys/bus/pci/devices/0000:00:00.0/power/control';
+____________________________________________________________________
+ *  *  *   Untunable Software Issues   *  *  *
+
+Description
+I2C Device 0-0051 has no runtime power management
+____________________________________________________________________
+ *  *  *   Optimal Tuned Software Settings   *  *  *
+
+Description
+NMI watchdog should be turned off
+Autosuspend for unknown USB device 2-1 (0451:8140)
+Autosuspend for USB device xHCI Host Controller [usb1]
+Autosuspend for unknown USB device 1-1 (0451:8142)
+Autosuspend for USB device xHCI Host Controller [usb2]
+Runtime PM for I2C Adapter i2c-3 (OMAP I2C adapter)
+Runtime PM for I2C Adapter i2c-6 (OMAP I2C adapter)
+I2C Device 0-0050 has no runtime power management
+Runtime PM for I2C Adapter i2c-1 (OMAP I2C adapter)
+Runtime PM for I2C Adapter i2c-8 (a000000.dp-bridge)
+Runtime PM for I2C Adapter i2c-4 (OMAP I2C adapter)
+Runtime PM for I2C Adapter i2c-2 (OMAP I2C adapter)
+Runtime PM for I2C Adapter i2c-0 (OMAP I2C adapter)
+Runtime PM for I2C Adapter i2c-7 (OMAP I2C adapter)
+Runtime PM for I2C Adapter i2c-5 (OMAP I2C adapter)
+
+____________________________________________________________________
+ *  *  *   Wake status of the devices   *  *  *
+
+Description;Script
+Wake status for USB device 2-1;echo 'enabled' > '/sys/bus/usb/devices/2-1/power/wakeup';
+Wake status for USB device usb1;echo 'enabled' > '/sys/bus/usb/devices/usb1/power/wakeup';
+Wake status for USB device 1-1;echo 'enabled' > '/sys/bus/usb/devices/1-1/power/wakeup';
+Wake status for USB device usb2;echo 'enabled' > '/sys/bus/usb/devices/usb2/power/wakeup';
