@@ -28,10 +28,11 @@ def load_dataset(dataset_dir):
 
 # Preprocess image
 def preprocess_image(image_path, input_shape):
-    img = Image.open(image_path).convert("RGB").resize(input_shape, Image.ANTIALIAS)
+    img = Image.open(image_path).convert("RGB").resize(input_shape, Image.Resampling.LANCZOS)
     img_array = np.array(img, dtype=np.float32)
     img_array = img_array / 255.0  # Normalize to [0, 1] if required by the model
     return np.expand_dims(img_array, axis=0)
+
 
 # Run Powertop to fetch power consumption data
 def get_power_consumption():
