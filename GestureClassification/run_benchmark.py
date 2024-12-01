@@ -9,7 +9,7 @@ from tflite_runtime.interpreter import Interpreter
 import psutil  # For monitoring CPU and memory usage
 
 # Constants
-MODEL_PATH = "model.tflite"  # Path to the TFLite model
+MODEL_PATH = "./models/gesture_classification.tflite"  # Path to the TFLite model
 DATASET_DIR = "./dataset"  # Directory containing images
 VISUALIZATION_DIR = "./visualizations"
 RESULTS_FILE = os.path.join(VISUALIZATION_DIR, "gesture_benchmark_results.csv")
