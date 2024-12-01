@@ -4,21 +4,34 @@ import csv
 import numpy as np
 from tqdm import tqdm
 import matplotlib.pyplot as plt
+from PIL import Image
 import tflite_runtime.interpreter as tflite
 
 # Constants
 MODEL_PATH = "quantized_model.tflite"
-NUM_IMAGES = 100
-IMAGE_SIZE = (513, 513)  # Update based on your model
+DATASET_DIR = "./dataset"
 VISUALIZATION_DIR = "./visualizations"
 RESULTS_FILE = os.path.join(VISUALIZATION_DIR, "benchmark_results.csv")
 
 # Create visualization directory
 os.makedirs(VISUALIZATION_DIR, exist_ok=True)
 
-# Simulated dataset for testing
-def generate_test_image(size):
-    return np.random.randint(0, 256, size=(1, *size, 3), dtype=np.uint8)
+# Load dataset
+def load_dataset(dataset_dir):
+    image_paths = [
+        os.path.join(dataset_dir, f) for f in os.listdir(dataset_dir)
+        if f.lower().endswith(('.png', '.jpg', '.jpeg'))
+    ]
+    if not image_paths:
+        raise FileNotFoundError(f"No image files found in {dataset_dir}")
+    return image_paths
+
+# Preprocess image
+def preprocess_image(image_path, input_shape):
+    img = Image.open(image_path).convert("RGB").resize(input_shape, Image.ANTIALIAS)
+    img_array = np.array(img, dtype=np.float32)
+    img_array = img_array / 255.0  # Normalize to [0, 1] if required by the model
+    return np.expand_dims(img_array, axis=0)
 
 # Run Powertop to fetch power consumption data
 def get_power_consumption():
@@ -33,7 +46,7 @@ def get_power_consumption():
         return np.nan  # Return NaN if powertop fails
 
 # Benchmark function
-def run_benchmark(interpreter, num_images):
+def run_benchmark(interpreter, dataset_paths):
     inference_times = []
     cpu_usages = []
     memory_usages = []
@@ -43,9 +56,9 @@ def run_benchmark(interpreter, num_images):
     output_details = interpreter.get_output_details()
     input_shape = input_details[0]['shape'][1:3]
 
-    for _ in tqdm(range(num_images), desc="Benchmarking Inference"):
-        # Generate a test image
-        input_data = generate_test_image(input_shape)
+    for image_path in tqdm(dataset_paths, desc="Benchmarking Inference"):
+        # Preprocess the image
+        input_data = preprocess_image(image_path, input_shape)
         
         # Set the input tensor
         interpreter.set_tensor(input_details[0]['index'], input_data)
@@ -121,8 +134,11 @@ def main():
     interpreter = tflite.Interpreter(model_path=MODEL_PATH)
     interpreter.allocate_tensors()
 
+    # Load dataset
+    dataset_paths = load_dataset(DATASET_DIR)
+
     print("Running Benchmark...")
-    inference_times, cpu_usages, memory_usages, power_consumptions = run_benchmark(interpreter, NUM_IMAGES)
+    inference_times, cpu_usages, memory_usages, power_consumptions = run_benchmark(interpreter, dataset_paths)
 
     print("Saving visualizations...")
     save_visualizations(inference_times, cpu_usages, memory_usages, power_consumptions)
