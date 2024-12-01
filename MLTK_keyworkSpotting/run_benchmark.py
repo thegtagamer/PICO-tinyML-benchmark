@@ -5,27 +5,29 @@ import numpy as np
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 import scipy.io.wavfile as wav
-import tensorflow as tf
 import tflite_runtime.interpreter as tflite
 
 # Constants
-MODEL_PATH = "./models/quantized_audio_model.tflite"
+MODEL_PATH = "./models/keyword_spotting.tflite"
 DATASET_DIR = "./dataset"
 VISUALIZATION_DIR = "./visualizations"
 RESULTS_FILE = os.path.join(VISUALIZATION_DIR, "benchmark_results.csv")
+MAX_INFERENCES = 100
 
 # Create visualization directory
 os.makedirs(VISUALIZATION_DIR, exist_ok=True)
 
 # Load dataset
-def load_dataset(dataset_dir):
-    """
-    Load all .wav files from the dataset directory.
-    """
-    audio_paths = [
-        os.path.join(dataset_dir, f) for f in os.listdir(dataset_dir)
-        if f.lower().endswith('.wav')
-    ]
+def load_dataset(dataset_dir, max_files=MAX_INFERENCES):
+    audio_paths = []
+    for root, _, files in os.walk(dataset_dir):
+        for file in files:
+            if file.lower().endswith('.wav'):
+                audio_paths.append(os.path.join(root, file))
+                if len(audio_paths) >= max_files:
+                    break  # Stop after collecting 1000 files
+        if len(audio_paths) >= max_files:
+            break
     if not audio_paths:
         raise FileNotFoundError(f"No audio files found in {dataset_dir}")
     return audio_paths
@@ -34,32 +36,26 @@ def load_dataset(dataset_dir):
 def preprocess_audio(file_path, input_shape):
     """
     Preprocess the input audio to match the model's input requirements.
-    Args:
-        file_path (str): Path to the audio file.
-        input_shape (list): Expected input shape of the model.
-    Returns:
-        np.ndarray: Preprocessed audio data ready for inference.
     """
     try:
         rate, audio = wav.read(file_path)
-        
+
         # Ensure mono audio
         if len(audio.shape) > 1:
             audio = np.mean(audio, axis=1)
-        
+
         # Normalize audio
         audio = audio / np.max(np.abs(audio))
 
-        # Convert to spectrogram
-        spectrogram = tf.signal.stft(audio, frame_length=256, frame_step=128)
-        spectrogram = tf.abs(spectrogram)
+        # Generate spectrogram
+        spectrogram = np.abs(np.fft.rfft(audio, n=input_shape[-1]))  # Use FFT to approximate a spectrogram
 
-        # Resize to match the model's input shape
-        target_shape = input_shape[1:3]  # Exclude batch and channel dimensions
-        spectrogram_resized = tf.image.resize(tf.expand_dims(spectrogram, axis=-1), target_shape)
-        
-        # Add batch and channel dimensions
-        return tf.expand_dims(spectrogram_resized, axis=0).numpy().astype(np.float32)
+        # Resize to match model input
+        spectrogram = np.resize(spectrogram, input_shape[:-1])  # Resize to [time, features]
+        spectrogram = np.expand_dims(spectrogram, axis=-1)  # Add channel dimension
+        spectrogram = np.expand_dims(spectrogram, axis=0)  # Add batch dimension
+
+        return spectrogram.astype(np.float32)
 
     except Exception as e:
         print(f"Error processing {file_path}: {e}")
@@ -76,7 +72,7 @@ def run_benchmark(interpreter, dataset_paths):
 
     input_details = interpreter.get_input_details()
     output_details = interpreter.get_output_details()
-    input_shape = input_details[0]['shape']
+    input_shape = input_details[0]['shape'][1:]  # Exclude batch dimension
 
     for file_path in tqdm(dataset_paths, desc="Benchmarking Inference"):
         input_data = preprocess_audio(file_path, input_shape)
@@ -159,7 +155,7 @@ def main():
     interpreter.allocate_tensors()
 
     # Load dataset
-    dataset_paths = load_dataset(DATASET_DIR)
+    dataset_paths = load_dataset(DATASET_DIR, MAX_INFERENCES)
 
     print("Running Benchmark...")
     inference_times, cpu_usages, memory_usages = run_benchmark(interpreter, dataset_paths)
@@ -174,4 +170,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
