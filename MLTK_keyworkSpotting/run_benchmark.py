@@ -6,6 +6,7 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 import scipy.io.wavfile as wav
 import tflite_runtime.interpreter as tflite
+import psutil  # For monitoring CPU and memory usage
 
 # Constants
 MODEL_PATH = "./models/keyword_spotting.tflite"
@@ -82,19 +83,27 @@ def run_benchmark(interpreter, dataset_paths):
         try:
             # Set input tensor
             interpreter.set_tensor(input_details[0]['index'], input_data)
+            
+            # Monitor system metrics before inference
+            cpu_before = psutil.cpu_percent(interval=None)
+            mem_before = psutil.virtual_memory().percent
+    
 
             # Measure inference time
             start_time = time.perf_counter()
             interpreter.invoke()
             end_time = time.perf_counter()
+            
+            # Monitor system metrics after inference
+            cpu_after = psutil.cpu_percent(interval=None)
+            mem_after = psutil.virtual_memory().percent
 
             # Fetch inference time
             inference_time = end_time - start_time
             inference_times.append(inference_time)
 
-            # Placeholder metrics for CPU and memory usage
-            cpu_usages.append(np.random.uniform(5, 15))  # Simulated CPU usage
-            memory_usages.append(np.random.uniform(1, 10))  # Simulated memory usage
+            cpu_usages.append((cpu_before + cpu_after) / 2)  # Average CPU usage
+            memory_usages.append(mem_after)  # Memory usage at the end of inference
 
         except Exception as e:
             print(f"Error processing file {file_path}: {e}")
