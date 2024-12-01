@@ -3,7 +3,7 @@ import numpy as np
 import cv2
 
 # Load the TFLite model
-interpreter = tflite.Interpreter(model_path="./models/quantized_deeplabv3_mobilenet_v2.tflite")
+interpreter = tflite.Interpreter(model_path="MobileNet_V2.tflite")
 interpreter.allocate_tensors()
 print(interpreter.get_tensor_details())
 
