@@ -1,3 +1,3 @@
 Real-Time Performance
 Benchmarking of TinyML Models in Embedded
-Systems
+Systems (PICO: Performance of Inference, CPU, and Operations)
